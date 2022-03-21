@@ -7,7 +7,8 @@ const INVENTORY_DATA = "./data/inventories.json";
 
 // Add New Inventory Item
 router.post("/add", (req, res) => {
-  const { itemName, itemDescription, category, status, quantity, warehouse } = req.body;
+  const { itemName, itemDescription, category, status, quantity, warehouse } =
+    req.body;
 
   const inventoryJSON = {
     id: uuidv4(),
