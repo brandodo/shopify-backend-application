@@ -1,10 +1,14 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 const app = express();
 
+const inventoryRoutes = require("./routes/inventories");
+
+app.use(express.json());
 app.use(cors());
 
+app.use("/inventory", inventoryRoutes);
 
 app.listen(8080, function () {
-  console.log('CORS-enabled web server listening on port 8080')
+  console.log("CORS-enabled web server listening on port 8080");
 });
