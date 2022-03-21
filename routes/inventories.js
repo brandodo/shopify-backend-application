@@ -48,7 +48,7 @@ router.put("/edit/:inventoryId/:warehouseId", (req, res) => {
 
     const currentData = JSON.parse(data);
     const invIndex = currentData.findIndex(
-      (video) => video.id === inventoryId && video.warehouseID === warehouseId
+      (item) => item.id === inventoryId && item.warehouseID === warehouseId
     );
 
     if (invIndex === -1) {
