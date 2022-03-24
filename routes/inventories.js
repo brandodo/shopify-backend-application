@@ -2,8 +2,32 @@ const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
+const { setFlagsFromString } = require("v8");
 
 const INVENTORY_DATA = "./data/inventories.json";
+
+router.get("/", (req, res) => {
+  fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
+
+    const currentData = JSON.parse(data);
+    res.status(200).json(currentData);
+  });
+});
+
+router.get("/:inventoryId/:warehouseId", (req, res) => {
+  fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
+
+    const currentData = JSON.parse(data);
+    const { inventoryId, warehouseId } = req.params;
+    const inventoryIndex = currentData.findIndex(
+      (item) => item.id === inventoryId && item.warehouseID === warehouseId
+    );
+    const inventoryJSON = currentData[inventoryIndex];
+    res.status(200).json(inventoryJSON);
+  });
+});
 
 // Add New Inventory Item
 router.post("/add", (req, res) => {
@@ -37,19 +61,19 @@ router.post("/add", (req, res) => {
 });
 
 // Edit Inventory Item
-router.put("/edit/:inventoryId/:warehouseId", (req, res) => {
+router.put("/edit/:inventoryId", (req, res) => {
   const { itemName, itemDescription, category, status, quantity, warehouse } =
     req.body;
 
-  const { inventoryId, warehouseId } = req.params;
+  const intQuantity = parseInt(quantity);
+
+  const { inventoryId } = req.params;
 
   fs.readFile(INVENTORY_DATA, (err, data) => {
     if (err) throw err;
 
     const currentData = JSON.parse(data);
-    const invIndex = currentData.findIndex(
-      (item) => item.id === inventoryId && item.warehouseID === warehouseId
-    );
+    const invIndex = currentData.findIndex((item) => item.id === inventoryId);
 
     if (invIndex === -1) {
       res.status(404).send("Inventory or Warehouse not found!");
@@ -59,7 +83,7 @@ router.put("/edit/:inventoryId/:warehouseId", (req, res) => {
       inventoryToUpdate.description = itemDescription;
       inventoryToUpdate.category = category;
       inventoryToUpdate.status = status;
-      inventoryToUpdate.quantity = quantity;
+      inventoryToUpdate.quantity = intQuantity;
       inventoryToUpdate.warehouseName = warehouse;
 
       fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
