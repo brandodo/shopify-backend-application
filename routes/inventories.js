@@ -64,9 +64,7 @@ router.post("/add", (req, res) => {
 router.put("/edit/:inventoryId", (req, res) => {
   const { itemName, itemDescription, category, status, quantity, warehouse } =
     req.body;
-
   const intQuantity = parseInt(quantity);
-
   const { inventoryId } = req.params;
 
   fs.readFile(INVENTORY_DATA, (err, data) => {
