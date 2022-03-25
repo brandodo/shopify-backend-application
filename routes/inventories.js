@@ -70,4 +70,23 @@ router.put("/edit/:inventoryId", (req, res) => {
   });
 });
 
+// DELETE Inventory Item
+router.delete("/delete/:inventoryId", (req, res) => {
+  fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
+
+    const currentData = JSON.parse(data);
+    const inventoryId = req.params.inventoryId;
+    const currIndex = currentData.findIndex((item) => item.id === inventoryId);
+    const deletedItem = currentData.splice(currIndex, 1);
+
+    fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
+      if (err) throw err;
+
+      console.log("Inventory item deleted!");
+      res.status(200).send(deletedItem);
+    });
+  });
+});
+
 module.exports = router;
