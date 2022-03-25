@@ -37,19 +37,17 @@ router.post("/add", (req, res) => {
 });
 
 // Edit Inventory Item
-router.put("/edit/:inventoryId/:warehouseId", (req, res) => {
+router.put("/edit/:inventoryId", (req, res) => {
   const { itemName, itemDescription, category, status, quantity, warehouse } =
     req.body;
 
-  const { inventoryId, warehouseId } = req.params;
+  const { inventoryId } = req.params;
 
   fs.readFile(INVENTORY_DATA, (err, data) => {
     if (err) throw err;
 
     const currentData = JSON.parse(data);
-    const invIndex = currentData.findIndex(
-      (item) => item.id === inventoryId && item.warehouseID === warehouseId
-    );
+    const invIndex = currentData.findIndex((item) => item.id === inventoryId);
 
     if (invIndex === -1) {
       res.status(404).send("Inventory or Warehouse not found!");
