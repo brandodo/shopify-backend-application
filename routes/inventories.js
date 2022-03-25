@@ -36,4 +36,38 @@ router.post("/add", (req, res) => {
   });
 });
 
+// Edit Inventory Item
+router.put("/edit/:inventoryId", (req, res) => {
+  const { itemName, itemDescription, category, status, quantity, warehouse } =
+    req.body;
+
+  const { inventoryId } = req.params;
+
+  fs.readFile(INVENTORY_DATA, (err, data) => {
+    if (err) throw err;
+
+    const currentData = JSON.parse(data);
+    const invIndex = currentData.findIndex((item) => item.id === inventoryId);
+
+    if (invIndex === -1) {
+      res.status(404).send("Inventory or Warehouse not found!");
+    } else {
+      const inventoryToUpdate = currentData[invIndex];
+      inventoryToUpdate.itemName = itemName;
+      inventoryToUpdate.description = itemDescription;
+      inventoryToUpdate.category = category;
+      inventoryToUpdate.status = status;
+      inventoryToUpdate.quantity = quantity;
+      inventoryToUpdate.warehouseName = warehouse;
+
+      fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
+        if (err) throw err;
+
+        console.log("Inventory updated!");
+        res.status(200).send(inventoryToUpdate);
+      });
+    }
+  });
+});
+
 module.exports = router;
