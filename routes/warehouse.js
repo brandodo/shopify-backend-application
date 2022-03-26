@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const warehouses = require("../JSONdata/warehouses.json");
+const inventory = require("../JSONdata/inventories.json");
+const fs = require("fs");
+const { nanoid } = require("nanoid");
 
 // Get single warehouse by ID
 router.get("/:id", (req, res) => {
