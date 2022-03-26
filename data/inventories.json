@@ -698,5 +698,15 @@
     "category": "Health",
     "status": "Out of Stock",
     "quantity": "0"
+  },
+  {
+    "id": "78da1e23-d773-424c-ab2c-e5d61616d31f",
+    "warehouseID": "d64a9ad2-6063-4bf1-86d8-be1a49cbac1f",
+    "warehouseName": "Miami",
+    "itemName": "Air Pods",
+    "description": "air pods pro 2022",
+    "category": "Electronics",
+    "status": "Out of Stock",
+    "quantity": 0
   }
 ]
