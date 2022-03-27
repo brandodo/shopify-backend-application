@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/inventory", inventoryRoutes);
-app.use("/warehouse", warehouseRoutes);
+app.use("/warehouses", warehouseRoutes);
 
 app.listen(8080, function () {
   console.log("CORS-enabled web server listening on port 8080");
