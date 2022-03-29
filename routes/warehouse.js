@@ -4,6 +4,7 @@ const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 
 const WAREHOUSE_DATA = "./data/warehouses.json";
+const INVENTORIES_DATA = "./data/inventories.json";
 
 // Edit Warehouse
 router.put("/edit/:id", (req, res) => {
@@ -53,20 +54,35 @@ router.put("/edit/:id", (req, res) => {
 //Delete a Warehouse
 
 router.delete("/edit/:id", (req, res) => {
-  fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
-    if (err) return res.send(err);
+  const { id } = req.params;
 
-    const currentData = JSON.parse(data);
-    const warehouseId = req.params.warehouseId;
-    const currIndex = currentData.findIndex((item) => item.id === warehouseId);
-    const deletedItem = currentData.splice(currIndex, 1);
+  let warehouseData, inventoriesData;
+  try {
+    warehouseData = JSON.parse(fs.readFileSync(WAREHOUSE_DATA, "utf-8"));
+    inventoriesData = JSON.parse(fs.readFileSync(INVENTORIES_DATA, "utf-8"));
+  } catch (err) {
+    console.error(err);
+    return res.send(err);
+  }
 
-    fs.writeFile(WAREHOUSE_DATA, JSON.stringify(currentData), (err) => {
-      if (err) return res.send(err);
+  const warehouseData2 = warehouseData.filter((x) => x.id !== id);
+  const inventoriesData2 = inventoriesData.filter((x) => x.warehouseID !== id);
 
-      console.log("Warehouse deleted!");
-      res.status(200).send(deletedItem);
-    });
+  try {
+    fs.writeFileSync(WAREHOUSE_DATA, JSON.stringify(warehouseData2, null, 2));
+    fs.writeFileSync(
+      INVENTORIES_DATA,
+      JSON.stringify(inventoriesData2, null, 2)
+    );
+  } catch (err) {
+    console.error(err);
+    return res.send(err);
+  }
+
+  console.log("Warehouse deleted!");
+  res.status(200).send({
+    removed_warehouse: warehouseData.length - warehouseData2.length,
+    removed_inventories: inventoriesData.length - inventoriesData2.length,
   });
 });
 
