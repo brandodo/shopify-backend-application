@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const warehouses = require("../data/warehouses.json");
-const inventory = require("../data/inventories.json");
 const fs = require("fs");
-// const { nanoid } = require("nanoid");
 const { v4: uuidv4 } = require("uuid");
 const WAREHOUSE_DATA = "./data/warehouses.json";
 const INVENTORIES_DATA = "./data/inventories.json";
@@ -26,17 +23,23 @@ router.get("/:id", (req, res) => {
 
 // Get inventory for a given warehouse by warehouse ID
 router.get("/:id/inventory", (req, res) => {
-  let { id } = req.params;
-  //   const warehouseFound = getWarehouse(id);
-  const warehouseInventory = inventory.filter((item) => {
-    return item.warehouseID === id;
+  const { id } = req.params;
+
+  fs.readFile(INVENTORIES_DATA, "utf-8", (err, data) => {
+    const currentData = JSON.parse(data);
+    const warehouseInventory = currentData.filter((item) => {
+      return item.warehouseID === id;
+    });
+    res.status(200).json(warehouseInventory);
   });
-  res.status(200).json(warehouseInventory);
 });
 
 // Get list of all warehouses
-router.get("/", (req, res) => {
-  res.status(200).json(warehouses);
+router.get("/", (_, res) => {
+  fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
+    const currentData = JSON.parse(data);
+    res.status(200).json(currentData);
+  });
 });
 
 // Edit Warehouse
@@ -84,8 +87,7 @@ router.put("/edit/:id", (req, res) => {
   });
 });
 
-//Delete a Warehouse
-
+// Delete a Warehouse
 router.delete("/edit/:id", (req, res) => {
   const { id } = req.params;
 
