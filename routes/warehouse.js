@@ -6,6 +6,7 @@ const fs = require("fs");
 // const { nanoid } = require("nanoid");
 const { v4: uuidv4 } = require("uuid");
 const WAREHOUSE_DATA = "./data/warehouses.json";
+const INVENTORIES_DATA = "./data/inventories.json";
 
 // Get single warehouse by ID
 router.get("/:id", (req, res) => {
@@ -80,6 +81,41 @@ router.put("/edit/:id", (req, res) => {
       console.log("Warehouse updated!");
       res.status(200).send(warehouseData);
     });
+  });
+});
+
+//Delete a Warehouse
+
+router.delete("/edit/:id", (req, res) => {
+  const { id } = req.params;
+
+  let warehouseData, inventoriesData;
+  try {
+    warehouseData = JSON.parse(fs.readFileSync(WAREHOUSE_DATA, "utf-8"));
+    inventoriesData = JSON.parse(fs.readFileSync(INVENTORIES_DATA, "utf-8"));
+  } catch (err) {
+    console.error(err);
+    return res.send(err);
+  }
+
+  const warehouseData2 = warehouseData.filter((x) => x.id !== id);
+  const inventoriesData2 = inventoriesData.filter((x) => x.warehouseID !== id);
+
+  try {
+    fs.writeFileSync(WAREHOUSE_DATA, JSON.stringify(warehouseData2, null, 2));
+    fs.writeFileSync(
+      INVENTORIES_DATA,
+      JSON.stringify(inventoriesData2, null, 2)
+    );
+  } catch (err) {
+    console.error(err);
+    return res.send(err);
+  }
+
+  console.log("Warehouse deleted!");
+  res.status(200).send({
+    removed_warehouse: warehouseData.length - warehouseData2.length,
+    removed_inventories: inventoriesData.length - inventoriesData2.length,
   });
 });
 
