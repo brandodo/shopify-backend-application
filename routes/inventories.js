@@ -5,6 +5,23 @@ const { v4: uuidv4 } = require("uuid");
 
 const INVENTORY_DATA = "./data/inventories.json";
 
+// Get An Inventory Item
+router.get("/:inventoryId", (req, res) => {
+  const { inventoryId } = req.params;
+
+  fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
+    const inventories = JSON.parse(data)
+    const invIndex = inventories.findIndex((item) => item.id === inventoryId);
+    if (invIndex === -1) {
+      // Not found
+      res.status(404).send({ message: "not found" });
+    } else {
+      res.status(200).send(inventories[invIndex])
+    }
+  });
+});
+
 // Add New Inventory Item
 router.post("/add", (req, res) => {
   const { itemName, itemDescription, category, status, quantity, warehouse } =
