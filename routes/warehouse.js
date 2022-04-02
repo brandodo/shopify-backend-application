@@ -51,8 +51,7 @@ router.put("/edit/:id", (req, res) => {
   });
 });
 
-//Delete a Warehouse
-
+// Delete a Warehouse
 router.delete("/edit/:id", (req, res) => {
   const { id } = req.params;
 
