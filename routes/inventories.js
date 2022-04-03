@@ -8,22 +8,15 @@ const INVENTORY_DATA = "./data/inventories.json";
 
 // Add New Inventory Item
 router.post("/add", (req, res) => {
-  const { itemName, itemDescription, category, status, quantity, warehouse } =
-    req.body;
-  let warehouseId;
-
-  fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
-    if (err) throw err;
-
-    const warehouseData = JSON.parse(data);
-    const warehouseIndex = warehouseData.findIndex(
-      (warehouse) => warehouse.name === warehouse
-    );
-
-    warehouseIndex
-      ? (warehouseId = warehouseData[warehouseIndex])
-      : (warehouseId = uuidv4());
-  });
+  const {
+    itemName,
+    itemDescription,
+    category,
+    status,
+    quantity,
+    warehouseId,
+    warehouse,
+  } = req.body;
 
   const inventoryJSON = {
     id: uuidv4(),
@@ -55,33 +48,44 @@ router.post("/add", (req, res) => {
 router.put("/edit/:inventoryId", (req, res) => {
   const { itemName, itemDescription, category, status, quantity, warehouse } =
     req.body;
-
+  const intQuantity = parseInt(quantity);
   const { inventoryId } = req.params;
 
-  fs.readFile(INVENTORY_DATA, (err, data) => {
+  fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
     if (err) throw err;
+    const warehouseData = JSON.parse(data);
+    const [warehouseObj] = warehouseData.filter(
+      (house) => house.name.toLowerCase() === warehouse.toLowerCase()
+    );
 
-    const currentData = JSON.parse(data);
-    const invIndex = currentData.findIndex((item) => item.id === inventoryId);
+    const warehouseId = warehouseObj.id;
 
-    if (invIndex === -1) {
-      res.status(404).send("Inventory or Warehouse not found!");
-    } else {
-      const inventoryToUpdate = currentData[invIndex];
-      inventoryToUpdate.itemName = itemName;
-      inventoryToUpdate.description = itemDescription;
-      inventoryToUpdate.category = category;
-      inventoryToUpdate.status = status;
-      inventoryToUpdate.quantity = quantity;
-      inventoryToUpdate.warehouseName = warehouse;
+    fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+      if (err) throw err;
 
-      fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
-        if (err) throw err;
+      const currentData = JSON.parse(data);
+      const invIndex = currentData.findIndex((item) => item.id === inventoryId);
 
-        console.log("Inventory updated!");
-        res.status(200).send(inventoryToUpdate);
-      });
-    }
+      if (invIndex === -1) {
+        res.status(404).send("Inventory or Warehouse not found!");
+      } else {
+        const inventoryToUpdate = currentData[invIndex];
+        inventoryToUpdate.itemName = itemName;
+        inventoryToUpdate.description = itemDescription;
+        inventoryToUpdate.category = category;
+        inventoryToUpdate.status = status;
+        inventoryToUpdate.quantity = intQuantity;
+        inventoryToUpdate.warehouseName = warehouse;
+        inventoryToUpdate.warehouseID = warehouseId;
+
+        fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
+          if (err) throw err;
+
+          console.log("Inventory updated!");
+          res.status(200).send(inventoryToUpdate);
+        });
+      }
+    });
   });
 });
 
