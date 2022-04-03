@@ -16,7 +16,7 @@ router.get("/:id", (req, res) => {
     const [warehouseFound] = currentData.filter(
       (warehouse) => warehouse.id === id
     );
-    console.log(currentData);
+
     res.status(200).json(warehouseFound);
   });
 });
