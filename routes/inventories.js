@@ -2,7 +2,6 @@ const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
-const { setFlagsFromString } = require("v8");
 
 const WAREHOUSE_DATA = "./data/warehouses.json";
 const INVENTORY_DATA = "./data/inventories.json";
@@ -33,45 +32,38 @@ router.get("/:inventoryId/:warehouseId", (req, res) => {
 
 // Add New Inventory Item
 router.post("/add", (req, res) => {
-  const { itemName, itemDescription, category, status, quantity, warehouse } =
-    req.body;
-  let warehouseId;
+  const {
+    itemName,
+    itemDescription,
+    category,
+    status,
+    quantity,
+    warehouseId,
+    warehouse,
+  } = req.body;
 
-  fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
+  const inventoryJSON = {
+    id: uuidv4(),
+    warehouseID: warehouseId,
+    warehouseName: warehouse,
+    itemName: itemName,
+    description: itemDescription,
+    category: category,
+    status: status,
+    quantity: quantity,
+  };
+
+  fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
     if (err) throw err;
 
-    const warehouseData = JSON.parse(data);
-    const warehouseIndex = warehouseData.findIndex(
-      (warehouse) => warehouse.name === warehouse
-    );
+    const currentData = JSON.parse(data);
+    currentData.push(inventoryJSON);
 
-    warehouseIndex
-      ? (warehouseId = warehouseData[warehouseIndex])
-      : (warehouseId = uuidv4());
-
-    const inventoryJSON = {
-      id: uuidv4(),
-      warehouseID: warehouseId,
-      warehouseName: warehouse,
-      itemName: itemName,
-      description: itemDescription,
-      category: category,
-      status: status,
-      quantity: quantity,
-    };
-
-    fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+    fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
       if (err) throw err;
 
-      const currentData = JSON.parse(data);
-      currentData.push(inventoryJSON);
-
-      fs.writeFile(INVENTORY_DATA, JSON.stringify(currentData), (err) => {
-        if (err) throw err;
-
-        console.log("New inventory item added!");
-        res.status(200).send(inventoryJSON);
-      });
+      console.log("New inventory item added!");
+      res.status(200).send(inventoryJSON);
     });
   });
 });
