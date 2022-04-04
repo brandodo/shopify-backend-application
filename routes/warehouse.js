@@ -5,6 +5,24 @@ const { v4: uuidv4 } = require("uuid");
 const WAREHOUSE_DATA = "./data/warehouses.json";
 const INVENTORIES_DATA = "./data/inventories.json";
 
+const formatPhoneNumber = (req, _, next) => {
+  if (req.body.phone) {
+    const cleanedPhone = req.body.phone.replace(new RegExp("\\D", "g"), "");
+    const phoneRegex = new RegExp("^(\\d|)?(\\d{3})(\\d{3})(\\d{4})$");
+    const match = cleanedPhone.match(phoneRegex);
+    let savedNumber = "";
+
+    if (match[1]) {
+      savedNumber = `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}`;
+    } else {
+      savedNumber = `+1 (${match[2]}) ${match[3]}-${match[4]}`;
+    }
+
+    req.body.phone = savedNumber;
+    next();
+  }
+};
+
 // GET SINGLE warehouse by ID
 router.get("/:id", (req, res) => {
   const { id } = req.params;
@@ -43,7 +61,7 @@ router.get("/", (_, res) => {
 });
 
 // POST Add new warehouse
-router.post("/add", (req, res) => {
+router.post("/add", formatPhoneNumber, (req, res) => {
   const {
     warehouseName,
     address,
@@ -85,7 +103,7 @@ router.post("/add", (req, res) => {
 });
 
 // Edit Warehouse
-router.put("/edit/:id", (req, res) => {
+router.put("/edit/:id", formatPhoneNumber, (req, res) => {
   const { id } = req.params;
   const {
     warehouseName,
