@@ -16,17 +16,20 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/:inventoryId/:warehouseId", (req, res) => {
+// Get An Inventory Item
+router.get("/:inventoryId", (req, res) => {
+  const { inventoryId } = req.params;
+
   fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
     if (err) throw err;
-
-    const currentData = JSON.parse(data);
-    const { inventoryId, warehouseId } = req.params;
-    const inventoryIndex = currentData.findIndex(
-      (item) => item.id === inventoryId && item.warehouseID === warehouseId
-    );
-    const inventoryJSON = currentData[inventoryIndex];
-    res.status(200).json(inventoryJSON);
+    const inventories = JSON.parse(data);
+    const invIndex = inventories.findIndex((item) => item.id === inventoryId);
+    if (invIndex === -1) {
+      // Not found
+      res.status(404).send({ message: "not found" });
+    } else {
+      res.status(200).send(inventories[invIndex]);
+    }
   });
 });
 
