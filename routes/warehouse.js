@@ -55,6 +55,7 @@ router.get("/:id/inventory", (req, res) => {
 // GET list of all warehouses
 router.get("/", (_, res) => {
   fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
     const currentData = JSON.parse(data);
     res.status(200).json(currentData);
   });
