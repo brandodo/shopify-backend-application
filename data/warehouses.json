@@ -8,7 +8,7 @@
     "contact": {
       "name": "Parmin Aujla",
       "position": "Warehouse Manager",
-      "phone": "+1 (646) 123-1234",
+      "phone": "+1 (111) 111-1111",
       "email": "paujla@instock.com"
     }
   },
@@ -101,6 +101,19 @@
       "position": "Warehouse Manager",
       "phone": "+1 (646) 123-1234",
       "email": "vmendoza@instock.com"
+    }
+  },
+  {
+    "id": "dfb13a27-3676-46d2-b278-3ab9a0fd0389",
+    "name": "Etobicoke",
+    "address": "420 Rexdale",
+    "city": "Etobicoke",
+    "country": "Canada",
+    "contact": {
+      "name": "Doug Ford",
+      "position": "CEO",
+      "phone": "+1 (416) 867-1111",
+      "email": "dougfordthegoat@toronto.com"
     }
   }
 ]

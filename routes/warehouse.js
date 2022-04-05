@@ -5,7 +5,25 @@ const { v4: uuidv4 } = require("uuid");
 const WAREHOUSE_DATA = "./data/warehouses.json";
 const INVENTORIES_DATA = "./data/inventories.json";
 
-// Get single warehouse by ID
+const formatPhoneNumber = (req, _, next) => {
+  if (req.body.phone) {
+    const cleanedPhone = req.body.phone.replace(new RegExp("\\D", "g"), "");
+    const phoneRegex = new RegExp("^(\\d|)?(\\d{3})(\\d{3})(\\d{4})$");
+    const match = cleanedPhone.match(phoneRegex);
+    let savedNumber = "";
+
+    if (match[1]) {
+      savedNumber = `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}`;
+    } else {
+      savedNumber = `+1 (${match[2]}) ${match[3]}-${match[4]}`;
+    }
+
+    req.body.phone = savedNumber;
+    next();
+  }
+};
+
+// GET SINGLE warehouse by ID
 router.get("/:id", (req, res) => {
   const { id } = req.params;
 
@@ -21,7 +39,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-// Get inventory for a given warehouse by warehouse ID
+// GET inventory for a given warehouse
 router.get("/:id/inventory", (req, res) => {
   const { id } = req.params;
 
@@ -34,16 +52,59 @@ router.get("/:id/inventory", (req, res) => {
   });
 });
 
-// Get list of all warehouses
+// GET list of all warehouses
 router.get("/", (_, res) => {
   fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
     const currentData = JSON.parse(data);
     res.status(200).json(currentData);
   });
 });
 
+// POST Add new warehouse
+router.post("/add", formatPhoneNumber, (req, res) => {
+  const {
+    warehouseName,
+    address,
+    city,
+    country,
+    name,
+    position,
+    phone,
+    email,
+  } = req.body;
+
+  const newWarehouse = {
+    id: uuidv4(),
+    name: warehouseName,
+    address: address,
+    city: city,
+    country: country,
+    contact: {
+      name: name,
+      position: position,
+      phone: phone,
+      email: email,
+    },
+  };
+
+  fs.readFile(WAREHOUSE_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
+
+    const currentData = JSON.parse(data);
+    currentData.push(newWarehouse);
+
+    fs.writeFile(WAREHOUSE_DATA, JSON.stringify(currentData), (err) => {
+      if (err) throw err;
+
+      console.log("New warehouse added!");
+      res.status(200).send(newWarehouse);
+    });
+  });
+});
+
 // Edit Warehouse
-router.put("/edit/:id", (req, res) => {
+router.put("/edit/:id", formatPhoneNumber, (req, res) => {
   const { id } = req.params;
   const {
     warehouseName,

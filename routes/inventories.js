@@ -12,13 +12,13 @@ router.get("/:inventoryId", (req, res) => {
 
   fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
     if (err) throw err;
-    const inventories = JSON.parse(data)
+    const inventories = JSON.parse(data);
     const invIndex = inventories.findIndex((item) => item.id === inventoryId);
     if (invIndex === -1) {
       // Not found
       res.status(404).send({ message: "not found" });
     } else {
-      res.status(200).send(inventories[invIndex])
+      res.status(200).send(inventories[invIndex]);
     }
   });
 });
