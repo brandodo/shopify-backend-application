@@ -115,31 +115,5 @@
       "phone": "+1 (416) 867-1111",
       "email": "dougfordthegoat@toronto.com"
     }
-  },
-  {
-    "id": "0e16b8a4-2f04-41d9-9afe-ac5a11a75d81",
-    "name": "Toronto",
-    "address": "401 Bay St.",
-    "city": "Toronto",
-    "country": "Canadaa",
-    "contact": {
-      "name": "Brandon",
-      "position": "CEO",
-      "phone": "+1 (123) 123-1234",
-      "email": "brandonong93@gmail.com"
-    }
-  },
-  {
-    "id": "e961d7c0-521d-4472-b265-732947f76ade",
-    "name": "Calgary",
-    "address": "123 Alberta Lane",
-    "city": "Calgary",
-    "country": "Alberta",
-    "contact": {
-      "name": "Tim buck two",
-      "position": "Supreme Leader",
-      "phone": "+1 (123) 123-1234",
-      "email": "timbuk@two.com"
-    }
   }
 ]

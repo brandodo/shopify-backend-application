@@ -1,15 +1,5 @@
 [
   {
-    "id": "83433026-ca32-4c6d-bd86-a39ee8b7303e",
-    "warehouseID": "0e16b8a4-2f04-41d9-9afe-ac5a11a75d81",
-    "warehouseName": "Toronto",
-    "itemName": "Gym Bag",
-    "description": "Made out of military-grade synthetic materials, this gym bag is highly durable, water resistant, and easy to clean.",
-    "category": "Gear",
-    "status": "In Stock",
-    "quantity": 100
-  },
-  {
     "id": "bdc6bb69-e09c-498d-8abd-be2792504d00",
     "warehouseID": "2922c286-16cd-4d43-ab98-c79f698aeab0",
     "warehouseName": "Manhattan",
