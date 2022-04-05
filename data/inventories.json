@@ -20,16 +20,6 @@
     "quantity": 100
   },
   {
-    "id": "b70067d1-49c9-4925-b830-67b3e98005d5",
-    "warehouseID": "2922c286-16cd-4d43-ab98-c79f698aeab0",
-    "warehouseName": "Manhattan",
-    "itemName": "Soap",
-    "description": "Organic and hypoallergenic, this soap is safe to use for all skin types.",
-    "category": "Health",
-    "status": "In Stock",
-    "quantity": 12500
-  },
-  {
     "id": "7c79d334-6b90-4052-9def-aa9b8519c9fb",
     "warehouseID": "90ac3319-70d1-4a51-b91d-ba6c2464408c",
     "warehouseName": "Jersey",
@@ -290,16 +280,6 @@
     "quantity": 0
   },
   {
-    "id": "3563eb2f-372d-4cf4-a4d9-cbb7851738d2",
-    "warehouseID": "dfb13a27-3676-46d2-b278-3ab9a0fd0389",
-    "warehouseName": "Toronto",
-    "itemName": "Backpack",
-    "description": "This sleek, 40L backpack is completely waterproof making it perfect for adventures or the daily commute.",
-    "category": "Accessories",
-    "status": "In Stock",
-    "quantity": 250
-  },
-  {
     "id": "98d370dc-6c7c-4bb3-90df-4e7c96fd2bf4",
     "warehouseID": "ade0a47b-cee6-4693-b4cd-a7e6cb25f4b7",
     "warehouseName": "Seattle",
@@ -456,16 +436,6 @@
     "itemName": "Winter Jacket",
     "description": "Made with a durable 100% waterproof shell, and breathable layers without a ton of vents and perforations. ",
     "category": "Apparel",
-    "status": "Out of Stock",
-    "quantity": 0
-  },
-  {
-    "id": "4040cfae-39bb-403b-80fa-b770642800b6",
-    "warehouseID": "bb1491eb-30e6-4728-a5fa-72f89feaf622",
-    "warehouseName": "Miami",
-    "itemName": "Watch",
-    "description": "Crafted from premium materials including a full-grain leather strap and a stainless steel case, this watch features swiss movement and is waterproof up to 5 ATM.",
-    "category": "Accessories",
     "status": "Out of Stock",
     "quantity": 0
   },
