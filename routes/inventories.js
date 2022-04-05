@@ -6,6 +6,16 @@ const { v4: uuidv4 } = require("uuid");
 const WAREHOUSE_DATA = "./data/warehouses.json";
 const INVENTORY_DATA = "./data/inventories.json";
 
+// GET list of inventory items
+router.get("/", (req, res) => {
+  fs.readFile(INVENTORY_DATA, "utf-8", (err, data) => {
+    if (err) throw err;
+
+    const currentData = JSON.parse(data);
+    res.status(200).json(currentData);
+  });
+});
+
 // Get An Inventory Item
 router.get("/:inventoryId", (req, res) => {
   const { inventoryId } = req.params;
