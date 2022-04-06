@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 
-const { PORT, BACKEND_URL } = process.env;
+const { PORT } = process.env;
 
 const inventoryRoutes = require("./routes/inventories");
 const warehouseRoutes = require("./routes/warehouse");
